@@ -1,0 +1,47 @@
+/* styles.css */
+body {
+    padding-top: 56px; /* For fixed navbar */
+    font-family: Arial, sans-serif;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.custom-container {
+    max-width: 960px;
+    margin: auto;
+}
+
+.navbar-brand {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.table thead th {
+    background-color: #007bff;
+    color: white;
+}
+
+.table-hover tbody tr:hover td {
+    background-color: #e2e6ea;
+}
+
+.footer {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+}
+
+.footer p {
+    margin: 0;
+    color: #6c757d;
+}
