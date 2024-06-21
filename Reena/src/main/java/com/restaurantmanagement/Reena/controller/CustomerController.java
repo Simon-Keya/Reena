@@ -1,4 +1,4 @@
-package com.restaurantmanagement.reena.controller;
+package com.restaurantmanagement.Reena.controller;
 
 import java.util.List;
 
@@ -25,12 +25,12 @@ public class CustomerController {
 
     @GetMapping
     public List<Customer> getAllCustomers() {
-        return customerService.getAllCustomers();
+        return customerService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
-        Customer customer = customerService.getCustomerById(id);
+        Customer customer = customerService.findById(id);
         if (customer != null) {
             return ResponseEntity.ok(customer);
         } else {
@@ -40,12 +40,12 @@ public class CustomerController {
 
     @PostMapping
     public Customer createCustomer(@RequestBody Customer customer) {
-        return customerService.saveCustomer(customer);
+        return customerService.save(customer);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customerDetails) {
-        Customer updatedCustomer = customerService.updateCustomer(id, customerDetails);
+        Customer updatedCustomer = customerService.update(id, customerDetails);
         if (updatedCustomer != null) {
             return ResponseEntity.ok(updatedCustomer);
         } else {
@@ -55,12 +55,10 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
-        if (customerService.deleteCustomer(id)) {
+        if (customerService.deleteById(id)) {
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 }
-
-

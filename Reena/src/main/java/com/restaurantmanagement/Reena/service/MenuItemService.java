@@ -15,19 +15,38 @@ public class MenuItemService {
     @Autowired
     private MenuItemRepository menuItemRepository;
 
-    public List<MenuItem> findAll() {
+    public List<MenuItem> getAllMenuItems() {
         return menuItemRepository.findAll();
     }
 
-    public Optional<MenuItem> findById(Long id) {
-        return menuItemRepository.findById(id);
+    public MenuItem getMenuItemById(Long id) {
+        Optional<MenuItem> menuItemOptional = menuItemRepository.findById(id);
+        return menuItemOptional.orElse(null);
     }
 
-    public MenuItem save(MenuItem menuItem) {
+    public MenuItem saveMenuItem(MenuItem menuItem) {
         return menuItemRepository.save(menuItem);
     }
 
-    public void deleteById(Long id) {
-        menuItemRepository.deleteById(id);
+    public MenuItem updateMenuItem(Long id, MenuItem menuItemDetails) {
+        Optional<MenuItem> optionalMenuItem = menuItemRepository.findById(id);
+        if (optionalMenuItem.isPresent()) {
+            MenuItem existingMenuItem = optionalMenuItem.get();
+            existingMenuItem.setName(menuItemDetails.getName());
+            existingMenuItem.setDescription(menuItemDetails.getDescription());
+            existingMenuItem.setPrice(menuItemDetails.getPrice());
+            // Update other fields as needed
+            return menuItemRepository.save(existingMenuItem);
+        }
+        return null; // or throw an exception
+    }
+
+    public boolean deleteMenuItem(Long id) {
+        Optional<MenuItem> optionalMenuItem = menuItemRepository.findById(id);
+        if (optionalMenuItem.isPresent()) {
+            menuItemRepository.delete(optionalMenuItem.get());
+            return true;
+        }
+        return false; // or throw an exception
     }
 }

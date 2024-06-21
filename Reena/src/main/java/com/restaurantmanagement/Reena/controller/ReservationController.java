@@ -1,9 +1,10 @@
-
-package com.restaurantmanagement.reena.controller;
+package com.restaurantmanagement.Reena.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,41 +26,46 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @GetMapping
-    public List<Reservation> getAllReservations() {
-        return reservationService.getAllReservations();
+    public ResponseEntity<List<Reservation>> getAllReservations() {
+        List<Reservation> reservations = reservationService.findAll();
+        if (reservations.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Reservation> getReservationById(@PathVariable Long id) {
-        Reservation reservation = reservationService.getReservationById(id);
-        if (reservation != null) {
-            return ResponseEntity.ok(reservation);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Optional<Reservation> reservation = reservationService.findById(id);
+        return reservation.map(ResponseEntity::ok)
+                          .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Reservation createReservation(@RequestBody Reservation reservation) {
-        return reservationService.saveReservation(reservation);
+    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
+        Reservation createdReservation = reservationService.save(reservation);
+        return new ResponseEntity<>(createdReservation, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Reservation> updateReservation(@PathVariable Long id, @RequestBody Reservation reservationDetails) {
-        Reservation updatedReservation = reservationService.updateReservation(id, reservationDetails);
-        if (updatedReservation != null) {
-            return ResponseEntity.ok(updatedReservation);
-        } else {
+    public ResponseEntity<Reservation> updateReservation(@PathVariable Long id, @RequestBody Reservation reservation) {
+        Optional<Reservation> existingReservationOptional = reservationService.findById(id);
+        if (existingReservationOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+
+        Reservation existingReservation = existingReservationOptional.get();
+        existingReservation.setCustomerName(reservation.getCustomerName());
+        existingReservation.setReservationDate(reservation.getReservationDate());
+        existingReservation.setNumberOfPeople(reservation.getNumberOfPeople());
+
+        Reservation updatedReservation = reservationService.save(existingReservation);
+        return ResponseEntity.ok(updatedReservation);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
-        if (reservationService.deleteReservation(id)) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        reservationService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

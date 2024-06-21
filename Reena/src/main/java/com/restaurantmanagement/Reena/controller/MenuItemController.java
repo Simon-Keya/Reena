@@ -1,5 +1,4 @@
-
-package com.restaurantmanagement.reena.controller;
+package com.restaurantmanagement.Reena.controller;
 
 import java.util.List;
 
@@ -14,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.restaurantmanagement.reena.service.MenuItemService;
+import com.restaurantmanagement.Reena.entity.MenuItem;
+import com.restaurantmanagement.Reena.service.MenuItemService;
 
 @RestController
 @RequestMapping("/api/menu-items")

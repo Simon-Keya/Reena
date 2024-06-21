@@ -1,5 +1,4 @@
-
-package com.restaurantmanagement.reena.entity;
+package com.restaurantmanagement.Reena.entity;
 
 import java.time.LocalDateTime;
 
@@ -8,8 +7,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "reservations")
@@ -25,7 +26,7 @@ public class Reservation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id", nullable = false)
-    private Table table;
+    private RestaurantTable table; // Change from 'Table' to 'RestaurantTable'
 
     @Column(name = "reservation_time", nullable = false)
     private LocalDateTime reservationTime;
@@ -34,7 +35,7 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Customer customer, Table table, LocalDateTime reservationTime) {
+    public Reservation(Customer customer, RestaurantTable table, LocalDateTime reservationTime) {
         this.customer = customer;
         this.table = table;
         this.reservationTime = reservationTime;
@@ -57,11 +58,11 @@ public class Reservation {
         this.customer = customer;
     }
 
-    public Table getTable() {
+    public RestaurantTable getTable() {
         return table;
     }
 
-    public void setTable(Table table) {
+    public void setTable(RestaurantTable table) {
         this.table = table;
     }
 
